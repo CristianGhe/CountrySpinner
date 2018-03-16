@@ -107,9 +107,9 @@ bintray {
     override = true //[Default: false] Whether to override version artifacts already published
 
     pkg {
-        repo = 'geronimostudios'
-        name = 'com.geronimostudios.coffeescene'
-        userOrg = 'geronimostudios'
+        repo = 'maven'
+        name = 'ro.gxorg.countryspinner'
+        userOrg = 'gxorg'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/CristianGhe/CountrySpinner.git'
         issueTrackerUrl = 'https://github.com/CristianGhe/CountrySpinner/issues'
