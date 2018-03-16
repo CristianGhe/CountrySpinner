@@ -1,15 +1,19 @@
 apply plugin: 'com.android.library'
+//apply plugin: 'com.github.dcendents.android-maven'
+apply plugin: 'com.jfrog.bintray'
+
+String library_version = '0.0.1'
 
 android {
-    compileSdkVersion 26
+    compileSdkVersion 27
 
 
 
     defaultConfig {
         minSdkVersion 15
-        targetSdkVersion 26
+        targetSdkVersion 27
         versionCode 1
-        versionName "1.0"
+        versionName library_version
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -27,8 +31,100 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    implementation 'com.android.support:appcompat-v7:26.1.0'
-    testImplementation 'junit:junit:4.12'
-    androidTestImplementation 'com.android.support.test:runner:1.0.1'
-    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    implementation 'com.android.support:appcompat-v7:27.1.0'
+}
+
+task sourcesJar(type: Jar) {
+    from android.sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+
+task javadoc(type: Javadoc) {
+    source = android.sourceSets.main.java.srcDirs
+    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+    failOnError = false
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+
+group = 'ro.gxorg.countryspinner' //bintray org/group name
+version = library_version //version
+
+//install {
+//    repositories.mavenInstaller {
+//        pom.project {
+//            name 'CountrySpinner'
+//            description 'A spinner populated with all the countries'
+//            url 'https://github.com/CristianGhe/CountrySpinner.git'
+//
+//            packaging 'aar'
+//            groupId 'ro.gxorg.countryspinner'
+//            artifactId 'countryspinner'
+//            version library_version
+//
+//            licenses {
+//                license {
+//                    name 'The Apache Software License, Version 2.0'
+//                    url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+//                    distribution 'repo'
+//                }
+//            }
+//            scm {
+//                connection 'https://github.com/CristianGhe/CountrySpinner.git'
+//                url 'https://github.com/CristianGhe/CountrySpinner.git'
+//
+//            }
+//            developers {
+//                developer {
+//                    id 'CristianGhe'
+//                    name 'Cristian Gheorghe'
+//                    email 'cristian.f.gheorghe@gmail.com'
+//                }
+//            }
+//        }
+//    }
+//}
+
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+
+    configurations = ['archives'] //When uploading configuration files
+
+    dryRun = false //[Default: false] Whether to run this as dry-run, without deploying
+    publish = true //[Default: false] Whether version should be auto published after an upload
+    override = true //[Default: false] Whether to override version artifacts already published
+
+    pkg {
+        repo = 'geronimostudios'
+        name = 'com.geronimostudios.coffeescene'
+        userOrg = 'geronimostudios'
+        licenses = ['Apache-2.0']
+        vcsUrl = 'https://github.com/CristianGhe/CountrySpinner.git'
+        issueTrackerUrl = 'https://github.com/CristianGhe/CountrySpinner/issues'
+        websiteUrl = ''
+        labels = ['android', 'spinner', 'view', 'country']
+        publicDownloadNumbers = true
+        version {
+            vcsTag = library_version
+            name = library_version
+            desc = 'A simple scene manager for Android'
+
+            gpg {
+                sign = true //Determines whether to GPG sign the files. The default is false
+                passphrase = properties.getProperty("bintray.gpg.passphrase") // The passphrase for GPG signing'
+            }
+        }
+    }
 }
