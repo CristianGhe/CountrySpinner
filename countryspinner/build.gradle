@@ -15,15 +15,13 @@ android {
         versionCode 1
         versionName library_version
 
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
         release {
-            minifyEnabled false
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            consumerProguardFiles 'proguard-rules.txt'
         }
+
     }
 
 }
@@ -107,9 +105,10 @@ bintray {
     override = true //[Default: false] Whether to override version artifacts already published
 
     pkg {
-        repo = 'maven'
-        name = 'ro.gxorg.countryspinner'
-        userOrg = 'gxorg'
+//        cristianghe / CountrySpinner / CountrySpinner
+        repo = 'CountrySpinner'
+        name = 'CountrySpinner'
+        userOrg = 'cristianghe'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/CristianGhe/CountrySpinner.git'
         issueTrackerUrl = 'https://github.com/CristianGhe/CountrySpinner/issues'
@@ -121,10 +120,10 @@ bintray {
             name = library_version
             desc = 'A simple scene manager for Android'
 
-            gpg {
-                sign = true //Determines whether to GPG sign the files. The default is false
-                passphrase = properties.getProperty("bintray.gpg.passphrase") // The passphrase for GPG signing'
-            }
+//            gpg {
+//                sign = true //Determines whether to GPG sign the files. The default is false
+//                passphrase = properties.getProperty("bintray.gpg.passphrase") // The passphrase for GPG signing'
+//            }
         }
     }
 }
